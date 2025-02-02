@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.0.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
     id 'org.jetbrains.kotlin.kapt'
 }
 
@@ -14,8 +14,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     // Ktor core dependencies for making HTTP requests and handling JSON serialization
     implementation("io.ktor:ktor-client-core:2.3.2")          // Основной клиент Ktor
@@ -24,29 +23,26 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:2.3.2")       // Логирование запросов и ответов
 
     // Coroutines for handling asynchronous tasks
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0") // Корутины для асинхронных операций
-
-    // Koin for dependency injection
-    implementation("io.insert-koin:koin-core:4.0.0")         // Koin для инъекции зависимостей
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     // Telegram Bot API for creating and managing the bot
-    implementation 'io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.0'
+    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7")
 
-
-    // SDK для интеграции с ЮKassa
-
-
-    // Exposed ORM and SQLite for managing database
-    implementation("org.jetbrains.exposed:exposed-core:0.41.1")  // Основной модуль Exposed для работы с БД
-    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")   // DAO-модель для работы с объектами базы данных
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")  // JDBC драйвер для работы с базой данных через Exposed
-    implementation("org.xerial:sqlite-jdbc:3.34.0")              // SQLite драйвер для использования базы данных
-
+    // Dotenv for managing environment variables
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
-    //Di dagger
+    // Exposed ORM for database management
+    implementation("org.jetbrains.exposed:exposed-core:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
+    implementation("org.postgresql:postgresql:42.7.2") // PostgreSQL Driver
+
+    // Dagger for Dependency Injection
     implementation("com.google.dagger:dagger:2.47")
     kapt("com.google.dagger:dagger-compiler:2.47")
+
+    // Optional logging library
+    implementation("ch.qos.logback:logback-classic:1.4.11") // Для удобного логирования
 }
 
 test {

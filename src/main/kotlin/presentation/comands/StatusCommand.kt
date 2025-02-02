@@ -1,4 +1,4 @@
 package presentation.comands
 
-class StatusCommand {
+class StatusCommand() {
 }

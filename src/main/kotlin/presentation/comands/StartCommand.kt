@@ -1,4 +1,6 @@
 package presentation.comands
 
-class StartCommand {
+import javax.inject.Inject
+
+class StartCommand @Inject constructor() {
 }
