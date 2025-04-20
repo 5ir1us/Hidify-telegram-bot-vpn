@@ -11,6 +11,7 @@ import presentation.comands.StartCommand
 import presentation.comands.StatusCommand
 import javax.inject.Inject
 
+
 class TelegramBotRoot @Inject constructor(
     private val userUseCase: UserUseCase,
     private val startCommand: StartCommand,
@@ -26,8 +27,9 @@ class TelegramBotRoot @Inject constructor(
         dispatch {
             registerCommands(this)
         }
-    }
 
+    }
+    fun getBot() = bot
     fun start() {
         println("Запускаем Telegram-бота...")
         bot.startPolling()

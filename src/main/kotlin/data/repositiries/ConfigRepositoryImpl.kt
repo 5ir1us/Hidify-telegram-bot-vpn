@@ -1,20 +1,26 @@
 package data.repositiries
 
-import data.api.vpn.IHidifyApiClient
-import data.dto.response.GetInfoLinkSubscriber
+import data.api.vpn.RetrofitHidifyClient
+import data.dto.vpn.response.GetInfoLinkSubscriber
 import data.utils.ConfigMapper
+import data.utils.UserMapper.toAllConf
 import domain.model.Config
+import domain.model.AllConfigUser
 import domain.repositories.ConfigRepository
 
 class ConfigRepositoryImpl(
-    private val apiClient: IHidifyApiClient
+    private val apiClient: RetrofitHidifyClient
 ) : ConfigRepository {
-    override suspend fun getConfig(secretUuid: String): Config {
-        val apiKey = System.getenv("HIDDIFY_API_KEY") ?: throw IllegalStateException("HIDDIFY_API_KEY отсутствует")
-        val proxyPath = System.getenv("HIDDIFY_PROXY_PATCH_CLIENT")
-            ?: throw IllegalStateException("HIDDIFY_PROXY_PATCH_CLIENT отсутствует")
 
-        val dto: GetInfoLinkSubscriber = apiClient.getUserInfo(apiKey, proxyPath, secretUuid)
+    override suspend fun getConfig(secretUuid: String): Config {
+        val dto: GetInfoLinkSubscriber = apiClient.getUserInfo(secretUuid)
         return ConfigMapper.toDomain(dto)
     }
+
+    override suspend fun getAllConfigUser(): AllConfigUser {
+        val resultDto = apiClient.getAllConfigUsers()
+        return resultDto.toAllConf()
+    }
+
+
 }

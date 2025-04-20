@@ -1,30 +1,45 @@
 package data.repositiries
 
-import data.api.vpn.IHidifyApiClient
-import data.dto.response.DeleteUserResponse
+import data.api.vpn.RetrofitHidifyClient
+import data.dto.vpn.request.CreateUserRequestDto
+import data.dto.vpn.response.UserDto
+import data.dto.vpn.response.DeleteUserResponse
 import data.utils.UserMapper
 import domain.model.User
 import domain.repositories.UserRepository
 
 class UserRepositoryImpl(
-    private val apiClient: IHidifyApiClient
+    private val apiClient: RetrofitHidifyClient
 ) : UserRepository {
 
 
-    override suspend fun createUser(user: User) {
-        val userDto = UserMapper.fromDomain(user)
-        val apiKey = System.getenv("HIDDIFY_API_KEY") ?: throw IllegalStateException("HIDDIFY_API_KEY отсутствует")
-        val proxyPath = System.getenv("HIDDIFY_PROXY_PATCH_ADMIN") ?: throw IllegalStateException("HIDDIFY_PROXY_PATCH_ADMIN отсутствует")
+    override suspend fun createUser(
+        enable: Boolean,
+        isActive: Boolean,
+        lang: String,
+        name: String,
+        packageDays: Int?,
+        telegramId: Int,
+        usageLimitGB: Double?
+    ): User {
+        val userDto = CreateUserRequestDto(
+            enable = enable,
+            isActive = isActive,
+            lang = lang,
+            name = name,
+            packageDays = packageDays,
+            telegramId = telegramId,
+            usageLimitGb = usageLimitGB
+        )
 
-        apiClient.createUser(apiKey, proxyPath, userDto)
+        val userRequest = apiClient.createUser(userDto)
+        return UserMapper.toUser(userRequest)
     }
 
     override suspend fun deleteUser(uuid: String): Boolean {
-        val apiKey = System.getenv("HIDDIFY_API_KEY") ?: throw IllegalStateException("HIDDIFY_API_KEY отсутствует")
-        val proxyPath = System.getenv("HIDDIFY_PROXY_PATCH_ADMIN") ?: throw IllegalStateException("HIDDIFY_PROXY_PATCH_ADMIN отсутствует")
-
-        val response: DeleteUserResponse = apiClient.deleteUser(apiKey, proxyPath, uuid)
+        val response: DeleteUserResponse = apiClient.deleteUser(uuid)
         return response.status == 200
     }
 
 }
+

@@ -6,26 +6,31 @@ import com.github.kotlintelegrambot.logging.LogLevel
 import dagger.Module
 import dagger.Provides
 import data.api.payment.PaymentApiClient
+import data.api.payment.RetrofitPaymentClient
 import data.api.vpn.IHidifyApiClient
 import data.api.vpn.NetworkClient
-import data.api.vpn.RetrofitNetworkClient
-import data.database.AppDatabase
+import data.api.vpn.RetrofitHidifyClient
 import data.repositiries.ConfigRepositoryImpl
-import data.repositiries.PaymentRepositoryImpl
+import data.repositiries.payment.PaymentRepositoryImpl
 import data.repositiries.UserRepositoryImpl
 import domain.repositories.ConfigRepository
 import domain.repositories.PaymentRepository
 import domain.repositories.UserRepository
-import io.ktor.client.HttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
 @Module
 class DataModule {
+
+    /**
+    Hididy
+     */
     @Provides
     @Singleton
+    @Named("vpnRetrofit")
     fun provideRetrofit(): Retrofit {
         val baseUrl = System.getenv("HIDDIFY_API_URL") ?: throw IllegalStateException("HIDDIFY_API_URL отсутствует")
         return Retrofit.Builder()
@@ -33,35 +38,84 @@ class DataModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
     @Provides
     @Singleton
-    fun provideApiClient(retrofit: Retrofit): IHidifyApiClient {
+    @Named("vpnApiClient")
+    fun provideApiClient(
+        @Named("vpnRetrofit") retrofit: Retrofit
+    ): IHidifyApiClient {
         return retrofit.create(IHidifyApiClient::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideNetworkClient(apiClient: IHidifyApiClient): NetworkClient {
-        return RetrofitNetworkClient(apiClient)
+    fun provideNetworkClient(
+        @Named("vpnApiClient") apiClient: IHidifyApiClient
+    ): NetworkClient {
+        return RetrofitHidifyClient(apiClient)
     }
+
+
     @Provides
     @Singleton
-    fun provideUserRepository(apiClient: IHidifyApiClient): UserRepository {
+    fun provideUserRepository(
+         apiClient: RetrofitHidifyClient
+    ): UserRepository {
         return UserRepositoryImpl(apiClient)
     }
+
     @Provides
     @Singleton
-    fun provideConfigRepository(apiClient: IHidifyApiClient): ConfigRepository {
+    fun provideConfigRepository(
+       apiClient: RetrofitHidifyClient
+    ): ConfigRepository {
         return ConfigRepositoryImpl(apiClient)
     }
 
+    /**
+    Ю-касса
+     */
+    @Provides
+    @Singleton
+    @Named("paymentRetrofit")
+    fun provideYooKassaRetrofit(): Retrofit {
+        val baseUrl = System.getenv("YOO_KASSA_API_URL") ?: throw IllegalStateException("YOO_KASSA_API_URL отсутствует")
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     @Provides
     @Singleton
-    fun providePaymentRepository(paymentApiClient: PaymentApiClient): PaymentRepository {
+    @Named("paymentApiClient")
+    fun provideYooKassaApiClient(
+        @Named("paymentRetrofit") retrofit: Retrofit
+    ): PaymentApiClient {
+        return retrofit.create(PaymentApiClient::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePaymentClient(
+        @Named("paymentApiClient") apiClient: PaymentApiClient
+    ): RetrofitPaymentClient {
+        return RetrofitPaymentClient(apiClient)
+    }
+
+
+    @Provides
+    @Singleton
+    fun providePaymentRepository(
+        paymentApiClient: RetrofitPaymentClient
+    ): PaymentRepository {
         return PaymentRepositoryImpl(paymentApiClient)
     }
 
+    /**
+    телеграм
+     */
     @Provides
     @Singleton
     fun provideTelegramBot(): Bot {
@@ -72,11 +126,5 @@ class DataModule {
         }
     }
 
-    @Provides
-    @Singleton
-    fun provideDatabase(): AppDatabase {
-        return AppDatabase.also {
-            it.connect()
-        }
-    }
+
 }

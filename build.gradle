@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.10'
     id 'org.jetbrains.kotlin.kapt'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.10'
 }
 
 group = 'org.example'
@@ -15,12 +16,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-
-    // Ktor core dependencies for making HTTP requests and handling JSON serialization
-    implementation("io.ktor:ktor-client-core:2.3.2")          // Основной клиент Ktor
-    implementation("io.ktor:ktor-client-cio:2.3.2")           // Клиент на основе CIO для асинхронных операций
-    implementation("io.ktor:ktor-client-serialization:2.3.2") // Сериализация/десериализация JSON
-    implementation("io.ktor:ktor-client-logging:2.3.2")       // Логирование запросов и ответов
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // Coroutines for handling asynchronous tasks
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
@@ -43,6 +39,17 @@ dependencies {
 
     // Optional logging library
     implementation("ch.qos.logback:logback-classic:1.4.11") // Для удобного логирования
+
+    //retrofit
+    implementation('com.squareup.retrofit2:retrofit:2.9.0')
+    implementation('com.squareup.retrofit2:converter-gson:2.9.0')
+
+    //Ktor
+    implementation("io.ktor:ktor-server-core:2.3.4")
+    implementation("io.ktor:ktor-server-netty:2.3.4")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
+
 }
 
 test {
@@ -50,4 +57,9 @@ test {
 }
 kotlin {
     jvmToolchain(17)
+}
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    }
 }

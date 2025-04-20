@@ -1,24 +1,16 @@
 package domain.model
 
+import com.google.gson.annotations.SerializedName
+ import kotlinx.serialization.Serializable
+
+@Serializable
 data class Config(
-    val domain: String,
-    val link: String,
-    val name: String,
-    val protocol: String,
-    val security: String,
-    val transport: String,
-    val type: String,
-    val adminMessageHtml: String,
-    val adminMessageUrl: String,
-    val brandIconUrl: String,
-    val brandTitle: String,
-    val lang: String,
-    val profileRemainingDays: Int,
-    val profileResetDays: Int,
-    val profileUsageCurrent: Int,
-    val profileUsageTotal: Int,
-    val speedtestEnable: Boolean,
-    val telegramBotUrl: String,
-    val telegramId: Int,
-    val telegramProxyEnable: Boolean
+    @SerializedName("expire_in")
+    val expire_in: Int?,
+
+    @SerializedName("full_url")
+    val full_url: String?,
+
+    @SerializedName("short")
+    val short: String?,
 )

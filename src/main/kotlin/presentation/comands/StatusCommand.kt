@@ -9,28 +9,54 @@ import domain.usecase.ConfigUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
 class StatusCommand @Inject constructor(
     private val configUseCase: ConfigUseCase
 ) {
-    private val scope = CoroutineScope(Dispatchers.IO) // ✅ Создаем корутину
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     fun register(dispatcher: Dispatcher) {
-        dispatcher.command("status") { scope.launch { sendSubscriptionStatus(bot, message.chat.id) } }
+        dispatcher.command("status") {
+            runBlocking(Dispatchers.IO) {
+                val chatId = message.chat.id
+                scope.launch {
+                    sendSubscriptionStatus(bot, chatId)
+                }
+            }
+        }
 
-        dispatcher.callbackQuery("status") { scope.launch { sendSubscriptionStatus(bot, callbackQuery.message?.chat?.id ?: return@launch) } }
+        dispatcher.callbackQuery("status") {
+            runBlocking(Dispatchers.IO) {
+            val chatId = callbackQuery.message?.chat?.id ?: return@runBlocking
+            scope.launch {
+                sendSubscriptionStatus(bot, chatId)
+            }
+        }
+        }
     }
+
 
     // ✅ Получаем ключи подписчика и отправляем их
     private suspend fun sendSubscriptionStatus(bot: Bot, chatId: Long) {
-        val userConfig = configUseCase.getConfig(chatId.toString()) // ⚡ Получаем конфиг подписчика
+        val allConfigs = configUseCase.getAllConfig()
+        val userConfig = allConfigs.allUsers.filter { it.telegramId?.toLong() == chatId }
 
-        val responseText = if (userConfig == null) {
-            "❌ У вас нет активных подписок."
-        } else {
-            "📊 Ваши купленные VPN-ключи:\n\n🔑 ${userConfig.link}"
+        if (userConfig.isEmpty()) {
+            bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                text = " ❌ У тебя нет ключей, ты еще не с нами ?\""
+            )
+            return
+        }
+        val responseText = buildString {
+            append("✅ Ваши UUID:\n\n")
+            userConfig.forEachIndexed { index, user ->
+                append("${index + 1}. ${user.uuid}\n")
+
+            }
         }
 
         bot.sendMessage(

@@ -1,8 +1,10 @@
 package data.api.vpn
 
-import data.dto.response.GetInfoLinkSubscriber
-import data.dto.request.UserDto
-import data.dto.response.DeleteUserResponse
+import data.dto.vpn.request.CreateUserRequestDto
+import data.dto.vpn.response.GetInfoLinkSubscriber
+import data.dto.vpn.response.UserDto
+import data.dto.vpn.response.DeleteUserResponse
+import data.dto.vpn.response.AllConfigUserDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -19,7 +21,7 @@ interface IHidifyApiClient {
      * Создает нового пользователя в Hiddify.
      *
      * @param apiKey Ключ API для авторизации.
-     * @param proxyPath Административный путь (proxy_path_admin).
+     * @param proxyPath Административный путь (proxy_path_ADMIN).
      * @param userRequest Данные пользователя для создания.
      * @return Созданный пользователь.
      */
@@ -27,14 +29,14 @@ interface IHidifyApiClient {
     suspend fun createUser(
         @Header("Hiddify-API-Key") apiKey: String,
         @Path("proxy_path_admin") proxyPath: String,
-        @Body userRequest: UserDto
-    )
+        @Body userRequest: CreateUserRequestDto
+    ): UserDto
 
     /**
      * Удаляет пользователя в Hiddify.
      *
      * @param apiKey Ключ API для авторизации.
-     * @param proxyPath Административный путь (proxy_path_admin).
+     * @param proxyPath Административный путь (proxy_path_ADMIN).
      * @param uuid Уникальный идентификатор пользователя.
      * @return Результат операции удаления.
      */
@@ -49,14 +51,24 @@ interface IHidifyApiClient {
      * Получает информацию о подписке пользователя.
      *
      * @param apiKey Ключ API для авторизации.
-     * @param proxyPath Пользовательский путь (proxy_path_user).
+     * @param proxyPath Пользовательский путь (proxy_path_USER).
      * @param uuid Уникальный идентификатор пользователя.
      * @return Информация о подписке.
      */
-    @GET("{proxy_path_user}/{secret_uuid}/api/v2/user/me/")
+    @GET("{proxy_path}/{secret_uuid}/api/v2/user/short/")
     suspend fun getUserInfo(
         @Header("Hiddify-API-Key") apiKey: String,
-        @Path("proxy_path_user") proxyPath: String,
+        @Path("proxy_path") proxyPath: String,
         @Path("secret_uuid") uuid: String
     ): GetInfoLinkSubscriber
+
+    /**
+     * Получает информацию о всех созданных пользователях.
+     * @param proxyPath Пользовательский путь (proxy_path_ADMIN).
+     */
+    @GET("/{proxy_path}/api/v2/admin/all-configs/")
+    suspend fun getAllConfigUser(
+        @Header("Hiddify-API-Key") apiKey: String,
+        @Path("proxy_path") proxyPath: String,
+    ):AllConfigUserDto
 }
