@@ -44,7 +44,7 @@ data class UserDto(
     val name: String, //имя пользователя ***Обязательный параметр
     val packageDays: Int?, // дни работы
     val startDate: String?,
-    val telegramId: Int?, //телеграм йд
+    val telegramId: Long?, //телеграм йд
     val usageLimitGB: Double?,
     val uuid: String?,//
     val wgPk: String?,

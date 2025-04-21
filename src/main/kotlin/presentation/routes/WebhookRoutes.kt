@@ -21,6 +21,7 @@ import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
+import presentation.utils.PaymentUserCache
 
 fun Routing.webhookRoutes(bot: Bot, userUseCase: UserUseCase, configUseCase: ConfigUseCase) {
     post("/webhooks") {
@@ -64,9 +65,9 @@ fun Routing.webhookRoutes(bot: Bot, userUseCase: UserUseCase, configUseCase: Con
                         PaymentUserCache.save(paymentId, chatId)
 
                         val user = userUseCase.createUser(
-                            nameUser = "User_$chatId",
+                            nameUser = "Rabbit_$chatId",
                             dayLimit = subscriptionParameters.dayLimit,
-                            telegramId = chatId.toInt(),
+                            telegramId = chatId,
                             usageLimitGB = subscriptionParameters.usageLimitGB
                         )
                         println("✅ Новый ключ (пользователь) создан: $user")
@@ -83,7 +84,9 @@ fun Routing.webhookRoutes(bot: Bot, userUseCase: UserUseCase, configUseCase: Con
                             println("vpnkey: $vpnKey")
                             bot.sendMessage(
                                 chatId = ChatId.fromId(chatId),
-                                text = "🎉 Оплата прошла успешно! Ваш VPN-ключ: $vpnKey"
+                                text = "🎉 Оплата прошла успешно!\n" +
+                                        "Это ВРЕМЕННАЯ ССЫЛКА постоянная в СТАТУСЕ\nВаш VPN-ключ: \n" +
+                                        vpnKey
                             )
                             println("VPN-ключ отправлен пользователю (ключ создан) с chat_id=$chatId")
                         }

@@ -2,7 +2,6 @@ package data.repositiries
 
 import data.api.vpn.RetrofitHidifyClient
 import data.dto.vpn.request.CreateUserRequestDto
-import data.dto.vpn.response.UserDto
 import data.dto.vpn.response.DeleteUserResponse
 import data.utils.UserMapper
 import domain.model.User
@@ -19,7 +18,7 @@ class UserRepositoryImpl(
         lang: String,
         name: String,
         packageDays: Int?,
-        telegramId: Int,
+        telegramId: Long,
         usageLimitGB: Double?
     ): User {
         val userDto = CreateUserRequestDto(

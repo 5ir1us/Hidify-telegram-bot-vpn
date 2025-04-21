@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     // Telegram Bot API for creating and managing the bot
-    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7")
+    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.3.0")
 
     // Dotenv for managing environment variables
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
@@ -41,12 +41,12 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.11") // Для удобного логирования
 
     //retrofit
-    implementation('com.squareup.retrofit2:retrofit:2.9.0')
-    implementation('com.squareup.retrofit2:converter-gson:2.9.0')
+    implementation('com.squareup.retrofit2:retrofit:2.11.0')
+    implementation('com.squareup.retrofit2:converter-gson:2.11.0')
 
     //Ktor
     implementation("io.ktor:ktor-server-core:2.3.4")
-    implementation("io.ktor:ktor-server-netty:2.3.4")
+    implementation("io.ktor:ktor-server-netty:3.1.2")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.4")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
 

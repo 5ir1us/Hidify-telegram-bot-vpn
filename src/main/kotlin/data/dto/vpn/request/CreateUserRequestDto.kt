@@ -13,7 +13,7 @@ data class CreateUserRequestDto(
     @SerializedName("package_days")
     val packageDays: Int?,
     @SerializedName("telegram_id")
-    val telegramId: Int?,
+    val telegramId: Long?,
     @SerializedName("usage_limit_GB")
     val usageLimitGb: Double?
     )

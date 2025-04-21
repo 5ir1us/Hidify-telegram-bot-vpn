@@ -1,6 +1,6 @@
 package domain.usecase.hidify
 
-import domain.model.AllConfigUser
+import domain.model.AllConfig
 import domain.model.Config
 import domain.repositories.ConfigRepository
 import domain.usecase.ConfigUseCase
@@ -29,7 +29,7 @@ class ConfigUseCaseImpl(
         return null
     }
 
-    override suspend fun getAllConfig(): AllConfigUser {
+    override suspend fun getAllConfig(): AllConfig {
         return configRepository.getAllConfigUser()
     }
 

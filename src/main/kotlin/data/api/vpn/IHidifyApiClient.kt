@@ -66,9 +66,9 @@ interface IHidifyApiClient {
      * Получает информацию о всех созданных пользователях.
      * @param proxyPath Пользовательский путь (proxy_path_ADMIN).
      */
-    @GET("/{proxy_path}/api/v2/admin/all-configs/")
+    @GET("/{proxy_path}/api/v2/admin/user/")
     suspend fun getAllConfigUser(
         @Header("Hiddify-API-Key") apiKey: String,
         @Path("proxy_path") proxyPath: String,
-    ):AllConfigUserDto
+    ): List<AllConfigUserDto>
 }

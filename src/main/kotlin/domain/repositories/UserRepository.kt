@@ -18,7 +18,7 @@ interface UserRepository {
         lang: String,
         name: String,
         packageDays: Int?,
-        telegramId: Int,
+        telegramId: Long,
         usageLimitGB: Double?
     ): User
     suspend fun deleteUser(uuid: String): Boolean

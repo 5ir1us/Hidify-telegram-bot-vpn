@@ -6,8 +6,9 @@ interface UserUseCase {
  suspend fun createUser(
   nameUser: String,
   dayLimit: Int,
-  telegramId: Int,
+  telegramId: Long,
   usageLimitGB: Double
  ):User
+ 
  suspend fun deleteUser(uuid: String): Boolean
  }

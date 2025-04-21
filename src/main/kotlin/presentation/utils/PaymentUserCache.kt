@@ -1,7 +1,6 @@
-package presentation.routes
+package presentation.utils
 
 import java.util.concurrent.ConcurrentHashMap
-
 
 object PaymentUserCache {
     private const val TTL_MILLIS = 2 * 24 * 60 * 60 * 1000L // 2 дня
@@ -35,4 +34,3 @@ object PaymentUserCache {
         map.clear()
     }
 }
-

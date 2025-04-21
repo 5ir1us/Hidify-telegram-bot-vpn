@@ -12,7 +12,7 @@ class UserUseCaseImpl(
     override suspend fun createUser(
         nameUser: String,
         dayLimit: Int,
-        telegramId: Int,
+        telegramId: Long,
         usageLimitGB: Double
     ): User {
 

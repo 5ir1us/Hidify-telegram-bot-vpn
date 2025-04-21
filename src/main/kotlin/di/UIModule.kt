@@ -6,10 +6,9 @@ import domain.repositories.PaymentRepository
 import domain.usecase.ConfigUseCase
 import domain.usecase.CreatePaymentUseCase
 import domain.usecase.CreateWebhookUseCase
-import domain.usecase.UserUseCase
 import domain.usecase.payment.CreateWebhookUseCaseImpl
 import presentation.comands.BuyCommand
-import presentation.comands.CancelCommand
+import presentation.comands.InfoCommand
 import presentation.comands.StartCommand
 import presentation.comands.StatusCommand
 import javax.inject.Provider
@@ -44,8 +43,8 @@ class UIModule {
 
     @Provides
     @Singleton
-    fun provideCancelCommand(): CancelCommand {
-        return CancelCommand()
+    fun provideCancelCommand(): InfoCommand {
+        return InfoCommand()
     }
 
     /**

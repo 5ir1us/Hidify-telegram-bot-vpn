@@ -1,6 +1,5 @@
 package presentation.comands
 
- import com.github.kotlintelegrambot.bot
  import com.github.kotlintelegrambot.dispatcher.Dispatcher
  import com.github.kotlintelegrambot.dispatcher.callbackQuery
  import com.github.kotlintelegrambot.dispatcher.command
@@ -12,7 +11,7 @@ import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import javax.inject.Inject
 
 
-class CancelCommand @Inject constructor() {
+class InfoCommand @Inject constructor() {
 
 
     fun register(dispatcher: Dispatcher) {
@@ -39,6 +38,6 @@ class CancelCommand @Inject constructor() {
     private fun CallbackQueryHandlerEnvironment.handleCancelCallback() {
         val chatId = callbackQuery.message?.chat?.id ?: return
         bot.sendMessage(ChatId.fromId(chatId), "🚫 Подписка отменена.")
-        // userUseCase.deleteUser(chatId) // Здесь добавьте логику отмены подписки
+
     }
 }

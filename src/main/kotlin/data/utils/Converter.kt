@@ -86,10 +86,32 @@ object UserMapper {
         )
     }
 
-    fun AllConfigUserDto.toAllConf (): AllConfigUser {
+    fun AllConfigUserDto.toConfigAllUser(): AllConfigUser{
         return AllConfigUser(
-            allUsers = this.allUsers.map {toUser(it)}
+            addedByUuid = addedByUuid,
+            comment = comment,
+            currentUsageGB = currentUsageGB,
+            ed25519PrivateKey = ed25519PrivateKey,
+            ed25519PublicKey = ed25519PublicKey,
+            enable = enable,
+            id = id,
+            isActive = isActive,
+            lang = lang,
+            lastOnline = lastOnline,
+            lastResetTime = lastResetTime,
+            mode = mode,
+            name = name,
+            packageDays = packageDays,
+            startDate = startDate,
+            telegram_id = telegram_id,
+            usageLimitGB = usageLimitGB,
+            uuid = uuid,
+            wgPrivateKey = wgPrivateKey,
+            wgPreSharedKey = wgPreSharedKey,
+            wgPublicKey = wgPublicKey
         )
     }
+
+
 
 }

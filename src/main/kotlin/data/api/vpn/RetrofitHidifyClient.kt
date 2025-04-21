@@ -55,10 +55,13 @@ class RetrofitHidifyClient @Inject constructor(
             apiClient.getUserInfo(apiKey, proxyPathAdmin, uuid)
         }
     }
-    suspend fun getAllConfigUsers (): AllConfigUserDto{
+
+    suspend fun getAllConfigUsers(): List<AllConfigUserDto> {
         val apiKey = System.getenv("HIDDIFY_API_KEY")
         val proxyPatchAdmin = System.getenv("HIDDIFY_PROXY_PATCH_ADMIN")
-        return apiClient.getAllConfigUser(apiKey,proxyPatchAdmin)
+        return doRequest {
+            apiClient.getAllConfigUser(apiKey, proxyPatchAdmin)
+        }
     }
 
 }

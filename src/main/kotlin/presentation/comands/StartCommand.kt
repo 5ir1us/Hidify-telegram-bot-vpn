@@ -8,8 +8,8 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
 import com.github.kotlintelegrambot.entities.ReplyMarkup
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
-import domain.usecase.UserUseCase
-import kotlinx.coroutines.runBlocking
+import presentation.utils.MessageCache
+import presentation.utils.autoDeleteMessage
 import javax.inject.Inject
 
 class StartCommand @Inject constructor(
@@ -20,16 +20,39 @@ class StartCommand @Inject constructor(
     fun register(dispatcher: Dispatcher) {
         dispatcher.command("start") {
             val chatId = message.chat.id
+
+            MessageCache.get(chatId)?.let { oldMessageId ->
+                bot.deleteMessage(ChatId.fromId(chatId), oldMessageId)
+            }
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
                 text = "Добро пожаловать! Выберите действие:",
                 replyMarkup = getMainMenu()
+            ).fold(
+                { message -> MessageCache.save(chatId, message.messageId) }, // Сохраняем ID
+                { error -> println("Ошибка: $error") }
             )
         }
-        dispatcher.callbackQuery("buy") { this.handleBuyCommand() }
-        dispatcher.callbackQuery("status") { this.handleStatusCommand() }
-        dispatcher.callbackQuery("ifo") { this.handleCancelInfo() }
-        dispatcher.callbackQuery("back_to_start") { this.handleBackToStartCommand() }
+
+        dispatcher.callbackQuery("buy") {
+            autoDeleteMessage {
+                handleBuyCommand()
+            }
+        }
+
+        statusCommand.register(dispatcher)
+
+        dispatcher.callbackQuery("ifo") {
+            autoDeleteMessage {
+                handleInfo()
+            }
+        }
+
+        dispatcher.callbackQuery("back_to_start") {
+            autoDeleteMessage {
+                handleBackToStartCommand()
+            }
+        }
 
     }
 
@@ -37,7 +60,7 @@ class StartCommand @Inject constructor(
         return InlineKeyboardMarkup.create(
             listOf(
                 listOf(InlineKeyboardButton.CallbackData("💳 Купить VPN", "buy")),
-                listOf(InlineKeyboardButton.CallbackData("📊 Статус подписки", "status")),
+                listOf(InlineKeyboardButton.CallbackData("\uD83D\uDD11 Статус подписки", "status")),
                 listOf(InlineKeyboardButton.CallbackData("🧪  Информация", "ifo")),
 
             )
@@ -49,13 +72,7 @@ class StartCommand @Inject constructor(
         buyCommand.executeBuyCommand(this, chatId)
     }
 
-    private fun CallbackQueryHandlerEnvironment.handleStatusCommand() {
-        val chatId = callbackQuery.message?.chat?.id ?: return
-        println("✅ Запрос статуса подписки от пользователя: $chatId")
-
-    }
-
-    private fun CallbackQueryHandlerEnvironment.handleCancelInfo() {
+    private fun CallbackQueryHandlerEnvironment.handleInfo() {
         val chatId = callbackQuery.message?.chat?.id ?: return
         bot.sendMessage(ChatId.fromId(chatId), " ")
     }
