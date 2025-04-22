@@ -8,6 +8,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
 import com.github.kotlintelegrambot.entities.ReplyMarkup
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
+import io.ktor.server.util.url
 import presentation.utils.MessageCache
 import presentation.utils.autoDeleteMessage
 import javax.inject.Inject
@@ -40,8 +41,6 @@ class StartCommand @Inject constructor(
             }
         }
 
-        statusCommand.register(dispatcher)
-
         dispatcher.callbackQuery("ifo") {
             autoDeleteMessage {
                 handleInfo()
@@ -61,7 +60,10 @@ class StartCommand @Inject constructor(
             listOf(
                 listOf(InlineKeyboardButton.CallbackData("💳 Купить VPN", "buy")),
                 listOf(InlineKeyboardButton.CallbackData("\uD83D\uDD11 Статус подписки", "status")),
-                listOf(InlineKeyboardButton.CallbackData("🧪  Информация", "ifo")),
+                listOf(InlineKeyboardButton.Url(
+                    text = "Вся необходимая информация",
+                    url = System.getenv("TELEGRAM_INFO_URL")
+                )),
 
             )
         )

@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.dispatcher.callbackQuery
 import com.github.kotlintelegrambot.dispatcher.handlers.CallbackQueryHandlerEnvironment
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
+import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.ReplyMarkup
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import domain.Constants.MAX_PAYMENT_AMOUNT
@@ -43,7 +44,7 @@ class BuyCommand @Inject constructor(
             autoDeleteMessage {
                 handleBuyCallback(
                     chatId = callbackQuery.message?.chat?.id,
-                    period = "6 месяцев\uD83D\uDCA6",
+                    period = "6 месяцев\uD83C\uDF19",
                     price = MID_PAYMENT_AMOUNT
                 )
             }
@@ -51,27 +52,29 @@ class BuyCommand @Inject constructor(
         dispatcher.callbackQuery("buy_12m")
         {
             autoDeleteMessage {
-            handleBuyCallback(
-                chatId = callbackQuery.message?.chat?.id,
-                period = "12 месяцев\uD83C\uDF08",
-                price = MAX_PAYMENT_AMOUNT
-            )
-                }
+                handleBuyCallback(
+                    chatId = callbackQuery.message?.chat?.id,
+                    period = "12 месяцев\uD83C\uDF19",
+                    price = MAX_PAYMENT_AMOUNT
+                )
+            }
         }
     }
+
     /**
     === Кнопки  ===
      */
     private fun getBuyMenu(): ReplyMarkup {
         return InlineKeyboardMarkup.create(
             listOf(
-                listOf(InlineKeyboardButton.CallbackData("1 месяц\uD83D\uDCA7 - $MIN_PAYMENT_AMOUNT₽", "buy_1m")),
-                listOf(InlineKeyboardButton.CallbackData("6 месяцев\uD83D\uDCA6 - $MID_PAYMENT_AMOUNT ₽", "buy_3m")),
-                listOf(InlineKeyboardButton.CallbackData("На год\uD83C\uDF08 - $MAX_PAYMENT_AMOUNT ₽", "buy_12m")),
+                listOf(InlineKeyboardButton.CallbackData("1 месяц\uD83C\uDF19 - $MIN_PAYMENT_AMOUNT₽", "buy_1m")),
+                listOf(InlineKeyboardButton.CallbackData("6 месяцев\uD83C\uDF19 - $MID_PAYMENT_AMOUNT ₽", "buy_3m")),
+                listOf(InlineKeyboardButton.CallbackData("На год\uD83C\uDF19 - $MAX_PAYMENT_AMOUNT ₽", "buy_12m")),
                 listOf(InlineKeyboardButton.CallbackData("🔙 Назад", "back_to_start"))
             )
         )
     }
+
     /**
     === Показываем меню   ===
      */
@@ -85,14 +88,15 @@ class BuyCommand @Inject constructor(
             { error -> println("Ошибка: $error") }
         )
     }
+
     /**
     === Обработка создания платежа ===
      */
     private fun CallbackQueryHandlerEnvironment.handleBuyCallback(
         chatId: Long?,
         period: String,
-        price: String)
-    {
+        price: String
+    ) {
         if (chatId == null) return
 
         runBlocking(Dispatchers.IO) {
@@ -128,7 +132,7 @@ class BuyCommand @Inject constructor(
                                     text = "💳 Оплатить сейчас",
                                     url = paymentUrl
                                 )
-                            ), listOf( // Второй ряд - кнопка "Назад"
+                            ), listOf(
                                 InlineKeyboardButton.CallbackData(
                                     text = "🔙 Назад",
                                     callbackData = "back_to_start"
@@ -138,7 +142,13 @@ class BuyCommand @Inject constructor(
                     )
                     bot.sendMessage(
                         chatId = ChatId.fromId(chatId),
-                        text = "🔐 Подписка на $period.\nНажмите на кнопку ниже, чтобы оплатить:",
+                        text = """
+        🔐 Подписка на $period.
+        Нажмите на кнопку ниже, чтобы оплатить.
+       
+        Оплачивая, вы соглашаетесь с условиями оферты
+        (https://telegra.ph/Polzovatelskoe-soglashenie-04-22-8).
+    """.trimIndent(),parseMode = ParseMode.HTML,
                         replyMarkup = keyboard
                     ).fold(
                         { message -> MessageCache.save(chatId, message.messageId) }, // Сохраняем ID

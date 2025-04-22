@@ -17,7 +17,7 @@ class TelegramBotRoot @Inject constructor(
     private val startCommand: StartCommand,
     private val buyCommand: BuyCommand,
     private val statusCommand: StatusCommand,
-    private val cancelCommand: InfoCommand
+    private val infoCommand: InfoCommand
 ) {
 
     private val bot = bot {
@@ -31,13 +31,13 @@ class TelegramBotRoot @Inject constructor(
     }
     fun getBot() = bot
     fun start() {
-        println("Запускаем Telegram-бота...")
+        println("Запускаем Telegram-бота")
         bot.startPolling()
     }
     private fun registerCommands(dispatcher: Dispatcher) {
-
         startCommand.register(dispatcher)
         buyCommand.register(dispatcher)
-        cancelCommand.register(dispatcher)
+        statusCommand.register(dispatcher)
+        infoCommand.register(dispatcher)
     }
 }

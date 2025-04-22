@@ -50,23 +50,33 @@ class StatusCommand @Inject constructor(
     }
 
     private suspend fun sendSubscriptionStatus(bot: Bot, chatId: Long) {
+        val backButton = InlineKeyboardMarkup.create(
+            listOf(
+                InlineKeyboardButton.CallbackData(
+                    text = "🔙 Назад",
+                    callbackData = "back_to_start"
+                )
+            )
+        )
 
         val allConfigs = configUseCase.getAllConfig().also {
         }
-        val userConfig = allConfigs.allUsers?.filter { user ->
+        val userConfig = allConfigs.allUsers.filter { user ->
             user.telegram_id == chatId
-        } ?: emptyList()
+        }
 
         if (userConfig.isEmpty()) {
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
-                text = " ❌ У тебя нет ключей, Купи ключ \uD83D\uDD11"
+                text = " ❌ У тебя нет ключей, Купи ключ \uD83D\uDD11",
+                replyMarkup = backButton
             ).fold(
                 { message -> MessageCache.save(chatId, message.messageId) },
                 { error -> println("Ошибка: $error") }
             )
             return
         }
+
         val url = System.getenv("HIDDIFY_API_URL")
         val patch = System.getenv("HIDDIFY_PROXY_PATCH_CLIENT")
         val messageText = "✅ Ваши ключи (нажмите, чтобы перейти и скопировать):"

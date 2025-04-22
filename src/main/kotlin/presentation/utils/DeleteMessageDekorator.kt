@@ -12,18 +12,15 @@ fun CallbackQueryHandlerEnvironment.autoDeleteMessage(
     val chatId = callbackQuery.message?.chat?.id ?: return
     val messageId = callbackQuery.message?.messageId
 
-    // Удаляем сообщение с командой (например, "/status")
     messageId?.let {
         bot.deleteMessage(ChatId.fromId(chatId), it)
     }
 
-    // Удаляем предыдущий ответ бота
     MessageCache.get(chatId)?.let { oldMessageId ->
         bot.deleteMessage(ChatId.fromId(chatId), oldMessageId)
         MessageCache.clear(chatId)
     }
 
-    // Запускаем оригинальный обработчик
     CoroutineScope(Dispatchers.IO).launch {
         block()
     }

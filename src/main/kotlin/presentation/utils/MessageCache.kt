@@ -1,7 +1,5 @@
 package presentation.utils
 
-
-
 object MessageCache {
     private val cache = mutableMapOf<Long, Long>()
 
@@ -10,14 +8,13 @@ object MessageCache {
         cache[chatId] = messageId
     }
 
-
     fun get(chatId: Long): Long? {
         return cache[chatId]
     }
 
-
     fun clear(chatId: Long) {
         cache.remove(chatId)
     }
+
 }
 

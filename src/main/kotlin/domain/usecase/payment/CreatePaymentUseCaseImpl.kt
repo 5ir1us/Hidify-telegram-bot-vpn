@@ -17,7 +17,7 @@ class CreatePaymentUseCaseImpl @Inject constructor(
         description: String,
 
         ): Payment {
-        val returnUrl = System.getenv("TELEGRAM_URL")
+        val returnUrl = System.getenv("TELEGRAM_BOT_URL")
         return paymentRepository.createPayment(
             amountValue = amount,
             amountCurrency = CURRENCY,
