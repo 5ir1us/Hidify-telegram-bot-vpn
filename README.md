@@ -8,6 +8,12 @@ Telegram бот для продажи VPN-подключений через ин
 
 ![Снимок экрана 2025-04-22 в 21 12 48](https://github.com/user-attachments/assets/5329d836-e71c-4f3e-bea8-7bf31b7cda2f)
 
+![Снимок экрана 2025-04-22 в 21 29 08](https://github.com/user-attachments/assets/8911cd98-e84f-4bf6-813d-ce9c9ee14cee)
+
+![Снимок экрана 2025-04-22 в 21 29 42](https://github.com/user-attachments/assets/6abf7ca9-90fa-417b-9f51-77a163145318)
+
+![Снимок экрана 2025-04-22 в 21 30 26](https://github.com/user-attachments/assets/8a9fc0ce-0b52-455a-a743-47bf835ca8ee)
+
 /start - Главное меню
 /buy - Купить подписку
 /status - Проверить статус
@@ -29,18 +35,23 @@ Telegram бот для продажи VPN-подключений через ин
 Создайте `.env` файл со следующими параметрами:
 
 ```env
-# Telegram
-TELEGRAM_BOT_TOKEN=ваш_токен_бота
-TELEGRAM_WEBHOOK_URL=ваш_вебхук_урл
-
 # Hiddify
-HIDDIFY_API_URL=ваш_api_url
-HIDDIFY_API_KEY=ваш_api_ключ
-
+HIDDIFY_API_URL  домен который в панели настроили / желательно sub ссылку / не желательно cdn ссылку
+HIDDIFY_API_KEY api панели в вашей ссылке на панель 
+HIDDIFY_PROXY_PATCH_ADMIN в расширенных настройках панели 
+HIDDIFY_PROXY_PATCH_CLIENT в расширенных настройках панели 
+HIDDIFY_PROXY_PATCH_UNIVERSAL не используется в проекте это уневерсальный патч для удобства 
 # YooKassa
-YOO_KASSA_API_URL=ваш_url_api
-SHOP_ID=ваш_shop_id
-PAYMENT_API_KEY=ваш_платежный_ключ
+PAYMENT_API_KEY  api Ю-Кассы ваш 
+PAYMENT_API_KEY_TEST тестовый api в проете он зашит везде оригинальный сюда вставлять либо переделывать в data слое 
+YOO_KASSA_API_URL =https://api.yookassa.ru/v3/   тут если ю касса не поменяет ничего трогать не надо 
+SHOP_ID  тут ваш id магазина либо тестовый либо настаящий 
+# Telegram
+TELEGRAM_BOT_TOKEN у Отца ботов попросите 
+TELEGRAM_BOT_URL=https://t.me/vpn_Rabbit_bot ссылка на ваш бот  
+TELEGRAM_INFO_URL  это ссылка по которой пользователь переходит при нажатии на "Вся неоходимая информация" можно группу сделать 
+TELEGRAM_WEBHOOK_URL ваши url на который Юкаасса будет посылать вебхуки 
+TELEGRAM_OFFER_AGREEMENT тут у нас ссылка на соглошение об окаазании услуг  в html формате 
 ```
 
 Тарифные планы в фале константы
@@ -55,6 +66,8 @@ MIN_LIMIT_GB	100.00 GB	Базовый
 MID_LIMIT_GB	600.00 GB	Стандартный  
 MAX_LIMIT_GB	1200.00 GB	Премиум  
 ```
+
+
 
 
 
