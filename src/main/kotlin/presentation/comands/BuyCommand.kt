@@ -147,7 +147,7 @@ class BuyCommand @Inject constructor(
         Нажмите на кнопку ниже, чтобы оплатить.
        
         Оплачивая, вы соглашаетесь с условиями оферты
-        (https://telegra.ph/Polzovatelskoe-soglashenie-04-22-8).
+        (${System.getenv("TELEGRAM_OFFER_AGREEMENT")}).
     """.trimIndent(),parseMode = ParseMode.HTML,
                         replyMarkup = keyboard
                     ).fold(

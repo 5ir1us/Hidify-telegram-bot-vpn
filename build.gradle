@@ -27,12 +27,6 @@ dependencies {
     // Dotenv for managing environment variables
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
-    // Exposed ORM for database management
-    implementation("org.jetbrains.exposed:exposed-core:0.41.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
-    implementation("org.postgresql:postgresql:42.7.2") // PostgreSQL Driver
-
     // Dagger for Dependency Injection
     implementation("com.google.dagger:dagger:2.47")
     kapt("com.google.dagger:dagger-compiler:2.47")
