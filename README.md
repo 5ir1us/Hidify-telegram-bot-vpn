@@ -2,17 +2,15 @@
 
 Telegram бот для продажи VPN-подключений через интеграцию с Hiddify и оплатой через YooKassa.
 
-![Снимок экрана 2025-04-22 в 21 12 07](https://github.com/user-attachments/assets/19d16ff7-49f5-4d08-8a98-3ccaef7c83ba)
-
- ![Снимок экрана 2025-04-22 в 21 12 28](https://github.com/user-attachments/assets/4d978b1f-8e4c-4ee6-84bc-fe035e3bbb19)
-
-![Снимок экрана 2025-04-22 в 21 12 48](https://github.com/user-attachments/assets/5329d836-e71c-4f3e-bea8-7bf31b7cda2f)
-
-![Снимок экрана 2025-04-22 в 21 29 08](https://github.com/user-attachments/assets/8911cd98-e84f-4bf6-813d-ce9c9ee14cee)
-
-![Снимок экрана 2025-04-22 в 21 29 42](https://github.com/user-attachments/assets/6abf7ca9-90fa-417b-9f51-77a163145318)
-
-![Снимок экрана 2025-04-22 в 21 30 26](https://github.com/user-attachments/assets/8a9fc0ce-0b52-455a-a743-47bf835ca8ee)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/19d16ff7-49f5-4d08-8a98-3ccaef7c83ba" width="200" alt="Главное меню">
+  <img src="https://github.com/user-attachments/assets/4d978b1f-8e4c-4ee6-84bc-fe035e3bbb19" width="200" alt="Выбор тарифа">
+  <img src="https://github.com/user-attachments/assets/5329d836-e71c-4f3e-bea8-7bf31b7cda2f" width="200" alt="Оплата">
+  <br>
+  <img src="https://github.com/user-attachments/assets/8911cd98-e84f-4bf6-813d-ce9c9ee14cee" width="400" alt="Статус подписки">
+  <img src="https://github.com/user-attachments/assets/6abf7ca9-90fa-417b-9f51-77a163145318" width="400" alt="Информация">
+</div>
+ 
 
 /start - Главное меню
 /buy - Купить подписку
