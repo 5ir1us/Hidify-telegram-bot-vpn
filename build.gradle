@@ -1,16 +1,49 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.0.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+    id 'org.jetbrains.kotlin.kapt'version '1.9.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
+    google()
     mavenCentral()
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") } // Репозиторий Ktor
+    maven { url = uri("https://jitpack.io") } // JitPack для kotlin-telegram-bot
 }
 
 dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    // Coroutines for handling asynchronous tasks
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
+    // Telegram Bot API for creating and managing the bot
+    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.3.0")
+
+    // Dotenv for managing environment variables
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
+    // Dagger for Dependency Injection
+    implementation("com.google.dagger:dagger:2.47")
+    kapt("com.google.dagger:dagger-compiler:2.47")
+
+    // Optional logging library
+    implementation("ch.qos.logback:logback-classic:1.4.11") // Для удобного логирования
+
+    //retrofit
+    implementation('com.squareup.retrofit2:retrofit:2.11.0')
+    implementation('com.squareup.retrofit2:converter-gson:2.11.0')
+
+    //Ktor
+    implementation("io.ktor:ktor-server-core:2.3.4")
+    implementation("io.ktor:ktor-server-netty:2.3.4")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
+
 }
 
 test {

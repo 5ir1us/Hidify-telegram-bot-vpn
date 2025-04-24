@@ -1,5 +1,26 @@
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+pluginManagement {
+    repositories {
+        // Основные репозитории для загрузки плагинов
+        mavenCentral()           // Maven Central для библиотек и плагинов
+        gradlePluginPortal()     // Gradle Plugin Portal для плагинов Gradle
+        google()                 // Google репозиторий (если требуется Android или другие плагины)
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == "org.jetbrains.kotlin") {
+                useVersion("1.9.0") // Указание версии для всех Kotlin плагинов
+            }
+        }
+    }
 }
-rootProject.name = 'vpn-bot-telegram'
 
+dependencyResolutionManagement {
+    repositories {
+        // Репозитории для зависимостей проекта
+        mavenCentral()
+        google()                 // Google репозиторий
+        maven { url = uri("https://jitpack.io") } // JitPack, если используете библиотеки с GitHub
+    }
+}
+
+rootProject.name = "vpn-bot-telegram" // Имя проекта
