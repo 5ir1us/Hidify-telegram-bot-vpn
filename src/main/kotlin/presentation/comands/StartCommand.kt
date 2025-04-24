@@ -27,7 +27,9 @@ class StartCommand @Inject constructor(
             }
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
-                text = "Добро пожаловать! Выберите действие:",
+                text = "Добро пожаловать Mr.Rabbit-${chatId} \n" +
+                        "\n" +
+                        "Выберите действие:",
                 replyMarkup = getMainMenu()
             ).fold(
                 { message -> MessageCache.save(chatId, message.messageId) }, // Сохраняем ID
@@ -83,8 +85,10 @@ class StartCommand @Inject constructor(
         val chatId = callbackQuery.message?.chat?.id ?: return
         bot.sendMessage(
             chatId = ChatId.fromId(chatId),
-            text = "Добро пожаловать! Выберите действие:",
-            replyMarkup = getMainMenu() // Показываем стартовое меню
+            text = "Добро пожаловать! Mr.Rabbit-$chatId \n " +
+                    "\n" +
+                    "Выберите действие:",
+            replyMarkup = getMainMenu()
         )
     }
 

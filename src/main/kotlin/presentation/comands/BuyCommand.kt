@@ -34,7 +34,7 @@ class BuyCommand @Inject constructor(
             autoDeleteMessage {
                 handleBuyCallback(
                     chatId = callbackQuery.message?.chat?.id,
-                    period = "1 месяц\uD83D\uDCA7",
+                    period = "1 месяц\uD83D\uDC07",
                     price = MIN_PAYMENT_AMOUNT
                 )
             }
@@ -44,7 +44,7 @@ class BuyCommand @Inject constructor(
             autoDeleteMessage {
                 handleBuyCallback(
                     chatId = callbackQuery.message?.chat?.id,
-                    period = "6 месяцев\uD83C\uDF19",
+                    period = "6 месяцев\uD83D\uDC07",
                     price = MID_PAYMENT_AMOUNT
                 )
             }
@@ -54,7 +54,7 @@ class BuyCommand @Inject constructor(
             autoDeleteMessage {
                 handleBuyCallback(
                     chatId = callbackQuery.message?.chat?.id,
-                    period = "12 месяцев\uD83C\uDF19",
+                    period = "12 месяцев\uD83D\uDC07",
                     price = MAX_PAYMENT_AMOUNT
                 )
             }
@@ -67,9 +67,9 @@ class BuyCommand @Inject constructor(
     private fun getBuyMenu(): ReplyMarkup {
         return InlineKeyboardMarkup.create(
             listOf(
-                listOf(InlineKeyboardButton.CallbackData("1 месяц\uD83C\uDF19 - $MIN_PAYMENT_AMOUNT₽", "buy_1m")),
-                listOf(InlineKeyboardButton.CallbackData("6 месяцев\uD83C\uDF19 - $MID_PAYMENT_AMOUNT ₽", "buy_3m")),
-                listOf(InlineKeyboardButton.CallbackData("На год\uD83C\uDF19 - $MAX_PAYMENT_AMOUNT ₽", "buy_12m")),
+                listOf(InlineKeyboardButton.CallbackData("1 месяц\uD83D\uDC07 - $MIN_PAYMENT_AMOUNT₽", "buy_1m")),
+                listOf(InlineKeyboardButton.CallbackData("6 месяцев\uD83D\uDC07 - $MID_PAYMENT_AMOUNT ₽", "buy_3m")),
+                listOf(InlineKeyboardButton.CallbackData("На год\uD83D\uDC07 - $MAX_PAYMENT_AMOUNT ₽", "buy_12m")),
                 listOf(InlineKeyboardButton.CallbackData("🔙 Назад", "back_to_start"))
             )
         )
