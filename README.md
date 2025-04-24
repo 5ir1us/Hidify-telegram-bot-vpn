@@ -34,21 +34,21 @@ Telegram бот для продажи VPN-подключений через ин
 
 ```env
 # Hiddify
-HIDDIFY_API_URL  домен который в панели настроили / желательно sub ссылку / не желательно cdn ссылку
-HIDDIFY_API_KEY api панели в вашей ссылке на панель 
-HIDDIFY_PROXY_PATCH_ADMIN в расширенных настройках панели 
-HIDDIFY_PROXY_PATCH_CLIENT в расширенных настройках панели 
-HIDDIFY_PROXY_PATCH_UNIVERSAL не используется в проекте это уневерсальный патч для удобства 
+HIDDIFY_API_URL=  домен который в панели настроили / желательно sub ссылку / не желательно cdn ссылку
+HIDDIFY_API_KEY= api панели в вашей ссылке на панель 
+HIDDIFY_PROXY_PATCH_ADMIN= в расширенных настройках панели 
+HIDDIFY_PROXY_PATCH_CLIENT= в расширенных настройках панели 
+HIDDIFY_PROXY_PATCH_UNIVERSAL= не используется в проекте это уневерсальный патч для удобства 
 # YooKassa
-PAYMENT_API_KEY  api Ю-Кассы ваш 
-PAYMENT_API_KEY_TEST тестовый api в проете он зашит везде оригинальный сюда вставлять либо переделывать в data слое 
-YOO_KASSA_API_URL =https://api.yookassa.ru/v3/   тут если ю касса не поменяет ничего трогать не надо 
-SHOP_ID  тут ваш id магазина либо тестовый либо настаящий 
+PAYMENT_API_KEY=  api Ю-Кассы ваш 
+PAYMENT_API_KEY_TEST= тестовый api в проете он зашит везде оригинальный сюда вставлять либо переделывать в data слое 
+YOO_KASSA_API_URL = https://api.yookassa.ru/v3/   тут если ю касса не поменяет ничего трогать не надо 
+SHOP_ID = тут ваш id магазина либо тестовый либо настаящий 
 # Telegram
-TELEGRAM_BOT_TOKEN у Отца ботов попросите 
-TELEGRAM_BOT_URL=https://t.me/vpn_Rabbit_bot ссылка на ваш бот  
-TELEGRAM_INFO_URL  это ссылка по которой пользователь переходит при нажатии на "Вся неоходимая информация" можно группу сделать 
-TELEGRAM_OFFER_AGREEMENT тут у нас ссылка на соглошение об окаазании услуг  в html формате 
+TELEGRAM_BOT_TOKEN = у Отца ботов попросите 
+TELEGRAM_BOT_URL= https://t.me/vpn_Rabbit_bot ссылка на ваш бот  
+TELEGRAM_INFO_URL =  это ссылка по которой пользователь переходит при нажатии на "Вся неоходимая информация" можно группу сделать 
+TELEGRAM_OFFER_AGREEMENT = тут у нас ссылка на соглошение об окаазании услуг  в html формате 
 ```
 
 Тарифные планы в фале константы
