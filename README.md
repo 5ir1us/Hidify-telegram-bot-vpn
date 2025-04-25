@@ -68,7 +68,7 @@ MAX_LIMIT_GB	1200.00 GB	Премиум
 На чистом Ubuntu -сервере выполните _одну_ команду:
 
 ```bash
-sudo bash <(curl -sSL https://raw.githubusercontent.com/5ir1us/Hidify-telegram-bot-vpn/main/install.sh)
+curl -sSL https://raw.githubusercontent.com/5ir1us/Hidify-telegram-bot-vpn/main/install.sh | sudo bash
 ```
 
 
