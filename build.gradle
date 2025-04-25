@@ -55,6 +55,7 @@ application {
 jar {
     archiveBaseName = 'vpn-bot-telegram'
     archiveVersion = '1.0-SNAPSHOT'
+    archiveClassifier = 'all'
     manifest {
         attributes 'Main-Class': 'presentation.MainKt'
     }
