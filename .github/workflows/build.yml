@@ -1,20 +1,22 @@
-name: Release
+name: Deploy
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main  # Срабатывает при пуше в main
 
 permissions:
   contents: write
 
 jobs:
-  create-release: # Переименовали job
+  deploy-release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -34,9 +36,16 @@ jobs:
             exit 1
           fi
 
-      - name: Release
+      - name: Generate release tag
+        id: tag
+        run: |
+          # Генерируем тег на основе даты и времени
+          echo "TAG_NAME=v$(date +%Y.%m.%d-%H%M%S)" >> $GITHUB_OUTPUT
+
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          name: Release ${{ steps.tag.outputs.TAG_NAME }}
           files: build/libs/vpn-bot-telegram-1.0-SNAPSHOT-all.jar
+          draft: false
