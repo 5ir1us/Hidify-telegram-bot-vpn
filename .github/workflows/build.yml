@@ -1,4 +1,4 @@
-name: Build & Release
+name: Release
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  create-release: # Переименовали job
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,13 @@ jobs:
         run: ./gradlew clean shadowJar --no-daemon --console=plain
 
       - name: Verify JAR exists
-        run: ls -l build/libs/
+        run: |
+          echo "Listing files in build/libs:"
+          ls -l build/libs/
+          if [ ! -f "build/libs/vpn-bot-telegram-1.0-SNAPSHOT-all.jar" ]; then
+            echo "Error: JAR file not found!"
+            exit 1
+          fi
 
       - name: Release
         uses: softprops/action-gh-release@v1
