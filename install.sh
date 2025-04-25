@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# === Настройте под свой репозиторий ===
+
 REPO_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn.git"
 BRANCH="main"
 APP_DIR="$HOME/Hidify-telegram-bot-vpn"
@@ -52,7 +52,11 @@ echo "==> Устанавливаем Git и OpenJDK 17 (если ещё не у�
 sudo apt-get update
 sudo apt-get install -y git openjdk-17-jdk
 
-# 3. Клонируем или обновляем репозиторий
+# 3. Останавливаем сервис, если он уже запущен
+echo "==> Останавливаем сервис $SERVICE_NAME (если он запущен)"
+sudo systemctl stop "$SERVICE_NAME" || true
+
+# 4. Клонируем или обновляем репозиторий
 if [ -d ".git" ]; then
   echo "==> Обновляем репозиторий $APP_DIR"
   git fetch origin
@@ -63,11 +67,18 @@ else
   git clone -b "$BRANCH" "$REPO_URL" .
 fi
 
-# 4. Собираем fat JAR
+# 5. Собираем fat JAR
 echo "==> Собираем проект (Gradle Shadow Jar)"
 ./gradlew clean shadowJar --no-daemon
 
-# 5. Генерируем скрипт запуска start.sh
+# Проверяем, что JAR-файл создан
+if [ ! -f "build/libs/$JAR_NAME" ]; then
+  echo "❌ Ошибка: JAR-файл build/libs/$JAR_NAME не был создан!"
+  echo "Проверьте логи Gradle выше или убедитесь, что shadowJar настроен в build.gradle."
+  exit 1
+fi
+
+# 6. Генерируем скрипт запуска start.sh
 cat > start.sh << EOF
 #!/usr/bin/env bash
 set -e
@@ -83,7 +94,7 @@ EOF
 chmod +x start.sh
 echo "==> Сгенерирован start.sh"
 
-# 6. Создаём или обновляем systemd-сервис
+# 7. Создаём или обновляем systemd-сервис
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 echo "==> Создаём/обновляем systemd unit $SERVICE_FILE"
 sudo tee "$SERVICE_FILE" > /dev/null << EOF
@@ -103,11 +114,15 @@ EnvironmentFile=$APP_DIR/.env
 WantedBy=multi-user.target
 EOF
 
-# 7. Перезагружаем systemd и запускаем/перезапускаем сервис
+# 8. Перезагружаем systemd и запускаем/перезапускаем сервис
 echo "==> Перезагружаем systemd и запускаем сервис $SERVICE_NAME"
 sudo systemctl daemon-reload
 sudo systemctl enable "$SERVICE_NAME"
 sudo systemctl restart "$SERVICE_NAME"
+
+# 9. Проверяем статус сервиса
+echo "==> Проверяем статус сервиса $SERVICE_NAME"
+sudo systemctl status "$SERVICE_NAME" --no-pager
 
 echo
 echo "✅ Установка/обновление завершено!"
