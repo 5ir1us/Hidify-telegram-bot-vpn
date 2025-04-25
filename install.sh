@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-
 REPO_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn.git"
 BRANCH="main"
 APP_DIR="$HOME/Hidify-telegram-bot-vpn"
@@ -52,11 +51,7 @@ echo "==> Устанавливаем Git и OpenJDK 17 (если ещё не у�
 sudo apt-get update
 sudo apt-get install -y git openjdk-17-jdk
 
-# 3. Останавливаем сервис, если он уже запущен
-echo "==> Останавливаем сервис $SERVICE_NAME (если он запущен)"
-sudo systemctl stop "$SERVICE_NAME" || true
-
-# 4. Клонируем или обновляем репозиторий
+# 3. Клонируем или обновляем репозиторий
 if [ -d ".git" ]; then
   echo "==> Обновляем репозиторий $APP_DIR"
   git fetch origin
@@ -68,7 +63,7 @@ else
   git clone -b "$BRANCH" "$REPO_URL" .
 fi
 
-# 5. Собираем fat JAR
+# 4. Собираем fat JAR
 echo "==> Собираем проект (Gradle Shadow Jar)"
 ./gradlew clean shadowJar --no-daemon
 
@@ -79,7 +74,7 @@ if [ ! -f "build/libs/$JAR_NAME" ]; then
   exit 1
 fi
 
-# 6. Генерируем скрипт запуска start.sh
+# 5. Генерируем скрипт запуска start.sh
 cat > start.sh << EOF
 #!/usr/bin/env bash
 set -e
@@ -95,10 +90,14 @@ EOF
 chmod +x start.sh
 echo "==> Сгенерирован start.sh"
 
-# 7. Создаём или обновляем systemd-сервис
-SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
-echo "==> Создаём/обновляем systemd unit $SERVICE_FILE"
-sudo tee "$SERVICE_FILE" > /dev/null << EOF
+# 6. Проверка на наличие systemd
+if pidof systemd > /dev/null; then
+  echo "==> Systemd обнаружен, настраиваем сервис $SERVICE_NAME"
+
+  SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
+
+  echo "==> Создаём/обновляем systemd unit $SERVICE_FILE"
+  sudo tee "$SERVICE_FILE" > /dev/null << EOF
 [Unit]
 Description=VPN Telegram Bot
 After=network.target
@@ -115,17 +114,18 @@ EnvironmentFile=$APP_DIR/.env
 WantedBy=multi-user.target
 EOF
 
-# 8. Перезагружаем systemd и запускаем/перезапускаем сервис
-echo "==> Перезагружаем systemd и запускаем сервис $SERVICE_NAME"
-sudo systemctl daemon-reload
-sudo systemctl enable "$SERVICE_NAME"
-sudo systemctl restart "$SERVICE_NAME"
+  echo "==> Перезагружаем systemd и запускаем сервис $SERVICE_NAME"
+  sudo systemctl daemon-reload
+  sudo systemctl enable "$SERVICE_NAME"
+  sudo systemctl restart "$SERVICE_NAME"
 
-# 9. Проверяем статус сервиса
-echo "==> Проверяем статус сервиса $SERVICE_NAME"
-sudo systemctl status "$SERVICE_NAME" --no-pager
+  echo "==> Проверяем статус сервиса $SERVICE_NAME"
+  sudo systemctl status "$SERVICE_NAME" --no-pager
+else
+  echo "⚠️  Systemd не обнаружен. Пропускаем настройку systemd-сервиса."
+  echo "👉 Вы можете запустить бота вручную:"
+  echo "   cd $APP_DIR && ./start.sh"
+fi
 
 echo
 echo "✅ Установка/обновление завершено!"
-echo "   Сервис '$SERVICE_NAME' запущен и активен."
-echo "   Логи: sudo journalctl -u $SERVICE_NAME -f"
