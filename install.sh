@@ -65,7 +65,7 @@ fi
 
 # 4. Собираем fat JAR
 echo "==> Собираем проект (Gradle Shadow Jar)"
-./gradlew clean shadowJar --no-daemon --console=plain
+./gradlew clean shadowJar --no-daemon --console=plain --quiet
 
 # Проверяем, что JAR-файл создан
 if [ ! -f "build/libs/$JAR_NAME" ]; then
