@@ -63,7 +63,13 @@ MIN_LIMIT_GB	100.00 GB	Базовый
 MID_LIMIT_GB	600.00 GB	Стандартный  
 MAX_LIMIT_GB	1200.00 GB	Премиум  
 ```
+## Быстрая установка и обновление
 
+На чистом Ubuntu -сервере выполните _одну_ команду:
+
+```bash
+sudo bash <(curl -sSL https://raw.githubusercontent.com/5ir1us/Hidify-telegram-bot-vpn/main/install.sh)
+```
 
 
 
