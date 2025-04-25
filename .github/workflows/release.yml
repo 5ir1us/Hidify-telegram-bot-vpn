@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -25,11 +25,12 @@ jobs:
       - name: Build fat JAR
         run: ./gradlew clean shadowJar --no-daemon --console=plain
 
+      - name: Verify JAR exists
+        run: ls -l build/libs/
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           files: build/libs/vpn-bot-telegram-1.0-SNAPSHOT-all.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
