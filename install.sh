@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-REPO_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn.git"
-BRANCH="main"
 APP_DIR="$HOME/Hidify-telegram-bot-vpn"
 JAR_NAME="vpn-bot-telegram-1.0-SNAPSHOT-all.jar"
 SERVICE_NAME="vpn-bot"
@@ -46,28 +44,37 @@ EOF
   exit 1
 fi
 
-# 2. Устанавливаем необходимые пакеты (Git, OpenJDK 17)
-echo "==> Устанавливаем Git и OpenJDK 17 (если ещё не установлены)"
+# 2. Устанавливаем необходимые пакеты (OpenJDK 17)
+echo "==> Устанавливаем OpenJDK 17 (если ещё не установлено)"
 sudo apt-get update
-sudo apt-get install -y git openjdk-17-jdk
+sudo apt-get install -y openjdk-17-jdk
 
-# 3. Клонируем или обновляем репозиторий
-if [ -d ".git" ]; then
-  echo "==> Обновляем репозиторий $APP_DIR"
-  git fetch origin
-  git checkout "$BRANCH"
-  git reset --hard HEAD
-  git pull origin "$BRANCH"
-else
-  echo "==> Клонируем репозиторий в $APP_DIR"
-  git clone -b "$BRANCH" "$REPO_URL" .
+# 3. Останавливаем сервис, если он уже запущен
+echo "==> Останавливаем сервис $SERVICE_NAME (если он запущен)"
+sudo systemctl stop "$SERVICE_NAME" || true
+
+# 4. Загружаем последний релиз JAR
+echo "==> Загружаем последний релиз JAR из GitHub"
+LATEST_RELEASE=$(curl -s https://api.github.com/repos/5ir1us/Hidify-telegram-bot-vpn/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+if [ -z "$LATEST_RELEASE" ]; then
+  echo "❌ Не удалось определить последний релиз. Проверьте доступ к GitHub."
+  echo "URL запроса: https://api.github.com/repos/5ir1us/Hidify-telegram-bot-vpn/releases/latest"
+  exit 1
+fi
+echo "Найден последний релиз: $LATEST_RELEASE"
+mkdir -p build/libs
+DOWNLOAD_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn/releases/download/$LATEST_RELEASE/$JAR_NAME"
+curl -sSL -o "build/libs/$JAR_NAME" "$DOWNLOAD_URL"
+if [ $? -ne 0 ]; then
+  echo "❌ Ошибка при загрузке JAR. URL: $DOWNLOAD_URL"
+  exit 1
 fi
 
-# 4. Собираем fat JAR
-echo "==> Скачиваем релизный JAR"
-RELEASE_TAG="latest"
-DOWNLOAD_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn/releases/download/${RELEASE_TAG}/vpn-bot-telegram-${RELEASE_TAG}-all.jar"
-curl -sL "$DOWNLOAD_URL" -o build/libs/$JAR_NAME
+# Проверяем, что JAR-файл загружен
+if [ ! -f "build/libs/$JAR_NAME" ]; then
+  echo "❌ Ошибка: JAR-файл build/libs/$JAR_NAME не был загружен!"
+  exit 1
+fi
 
 # 5. Генерируем скрипт запуска start.sh
 cat > start.sh << EOF
@@ -124,3 +131,4 @@ fi
 
 echo
 echo "✅ Установка/обновление завершено!"
+echo "   Логи: sudo journalctl -u $SERVICE_NAME -f"
