@@ -61,6 +61,7 @@ if [ -d ".git" ]; then
   echo "==> Обновляем репозиторий $APP_DIR"
   git fetch origin
   git checkout "$BRANCH"
+  git reset --hard HEAD
   git pull origin "$BRANCH"
 else
   echo "==> Клонируем репозиторий в $APP_DIR"
