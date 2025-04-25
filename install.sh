@@ -64,15 +64,10 @@ else
 fi
 
 # 4. Собираем fat JAR
-echo "==> Собираем проект (Gradle Shadow Jar)"
-./gradlew clean shadowJar --no-daemon --console=plain --quiet
-
-# Проверяем, что JAR-файл создан
-if [ ! -f "build/libs/$JAR_NAME" ]; then
-  echo "❌ Ошибка: JAR-файл build/libs/$JAR_NAME не был создан!"
-  echo "Проверьте логи Gradle выше или убедитесь, что shadowJar настроен в build.gradle."
-  exit 1
-fi
+echo "==> Скачиваем релизный JAR"
+RELEASE_TAG="latest"
+DOWNLOAD_URL="https://github.com/5ir1us/Hidify-telegram-bot-vpn/releases/download/${RELEASE_TAG}/vpn-bot-telegram-${RELEASE_TAG}-all.jar"
+curl -sL "$DOWNLOAD_URL" -o build/libs/$JAR_NAME
 
 # 5. Генерируем скрипт запуска start.sh
 cat > start.sh << EOF
