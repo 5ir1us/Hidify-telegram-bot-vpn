@@ -26,6 +26,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
           draft: false
@@ -34,6 +35,7 @@ jobs:
       - name: Upload JAR to Release
         uses: actions/upload-release-asset@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/libs/vpn-bot-telegram-1.0-SNAPSHOT-all.jar
           asset_name: vpn-bot-telegram-${{ github.ref_name }}-all.jar
