@@ -4,9 +4,9 @@ object Constants {
     const val CURRENCY = "RUB"
     const val CAPTURE = true
     const val CONFIRMATION_TYPE = "redirect"
-    const val MIN_PAYMENT_AMOUNT = "245.00"
-    const val MID_PAYMENT_AMOUNT = "1200.00"
-    const val MAX_PAYMENT_AMOUNT = "2400.00"
+    const val MIN_PAYMENT_AMOUNT = "187.00"
+    const val MID_PAYMENT_AMOUNT = "1000.00"
+    const val MAX_PAYMENT_AMOUNT = "2000.00"
 
     const val MIN_LIMIT_GB : Double = 100.00
     const val MID_LIMIT_GB : Double = 600.00

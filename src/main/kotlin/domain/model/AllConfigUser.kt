@@ -23,7 +23,7 @@ data class AllConfigUser(
     val id: Int,
 
     @SerialName("is_active")
-    val isActive: Boolean,
+    val is_active: Boolean,
 
     val lang: String?,
 
