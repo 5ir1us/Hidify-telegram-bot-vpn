@@ -95,7 +95,7 @@ object UserMapper {
             ed25519PublicKey = ed25519PublicKey,
             enable = enable,
             id = id,
-            isActive = isActive,
+            is_active = is_active,
             lang = lang,
             lastOnline = lastOnline,
             lastResetTime = lastResetTime,

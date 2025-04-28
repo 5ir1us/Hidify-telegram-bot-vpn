@@ -62,7 +62,7 @@ class StatusCommand @Inject constructor(
         val allConfigs = configUseCase.getAllConfig().also {
         }
         val userConfig = allConfigs.allUsers.filter { user ->
-            user.telegram_id == chatId
+            user.telegram_id == chatId && user.is_active
         }
 
         if (userConfig.isEmpty()) {
@@ -81,7 +81,9 @@ class StatusCommand @Inject constructor(
         val patch = System.getenv("HIDDIFY_PROXY_PATCH_CLIENT")
         val messageText = "✅ Ваши ключи (нажмите, чтобы перейти и скопировать):"
 
+
         val buttonss = userConfig.mapIndexed { index, user ->
+
             val fullUrl = "$url/$patch/${user.uuid}/#${user.name}"
             listOf(
                 InlineKeyboardButton.Url(
@@ -109,6 +111,5 @@ class StatusCommand @Inject constructor(
         )
 
     }
-
 
 }
